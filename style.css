@@ -1,4 +1,25 @@
-@font-face {font-family: Liberation Serif; src: url(http://jdgmiles.github.io/LiberationSerif.woff);}
+::selection {
+	background-color: black;
+	color: white;
+	}
+::-moz-selection {
+  background-color: black;
+	color: white;
+	}
+::-o-selection {
+  background-color: black;
+	color: white;
+	}
+::-ms-selection {
+  background-color: black;
+	color: white;
+	}
+::-webkit-selection {
+  background-color: black;
+	color: white;
+	}
+
+@font-face {font-family: Liberation Serif; src: url(LiberationSerif.woff);}
 @font-face {font-family: Liberation Serif Bold; src: url(http://jdgmiles.github.io/LiberationSerif-Bold.woff);}
 @font-face {font-family: Liberation Serif Italic; src: url(http://jdgmiles.github.io/LiberationSerif-Italic.woff);}
 @font-face {font-family: Liberation Serif Bold Italic; src: url(http://jdgmiles.github.io/LiberationSerif-BoldItalic.woff);}
@@ -7,13 +28,17 @@ body {font-family: Liberation Serif, Tahoma, Arial, Helvetica, Sans-Serif; backg
 
 table {border-spacing: 0;}
 
-.numbercell {background-color:white; width:70px;height:70px}
+.numbercell {background-color:white; width:70px;height:70px; text-align:center; font-size:50px}
 
-.hinequality {background-color:none; width:40px; color:white; text-align:center; font-size:53px;}
-.vinequality {background-color:none; height:40px;}
+.hinequality {background-color:none; width:50px; color:white; text-align:center; font-size:40px;}
+.vinequality {background-color:none; height:50px; color:white; text-align:center; font-size:38px;}
 .spacer {background-color:none;}
 
 .solvebutton {background-color:black; color:white; font-family: Liberation Serif, Georgia; font-size:60px; width:220px;}
+
+.pickingcell {text-align:center; vertical-align:middle; background-color:transparent; padding:3px;}
+
+.pickingcellcontent {text-align:center; vertical-align:middle; width:30px; height:30px; background-color:white; padding:0; border-radius:8px; border:3px solid black; text-align:center; font-size:25px; color:black;}
 
 a:link {color: red; text-decoration: none;}
 a:link:hover {text-decoration:underline}

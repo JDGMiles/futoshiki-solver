@@ -19,20 +19,110 @@
 		<div class="popup">
 			<a class="close" style="right: 30px;" href="#">&times;</a>
 			<div style="font-family:Georgia; color:white; text-align:center; text-decoration:underline; font-size:230%">Futoshiki Solver</div>
-			<span style="font-family:Georgia; font-size:25px; color:white; text-align:justify;"><br>This is a solver for Futoshiki puzzles.<br><br>Click a cell to insert a number clue and click between two cells to insert an inequality clue.<br><br>When you are ready, click &ldquo;Solve&rdquo;.<br></span>
+			<span style="font-family:Georgia; font-size:25px; color:white; text-align:justify;"><br>This is a solver for <a target="_blank" href="https://en.wikipedia.org/wiki/Futoshiki">Futoshiki</a> puzzles.<br><br>Click a cell to insert a number clue and click between two cells to insert an inequality clue.<br><br>When you are ready, click &ldquo;Solve&rdquo;.<br></span>
 		</div>
 	</div>
 
 	<table style="padding:0px 80px 0px 80px;">
-		<tr><td class="numbercell"></td><td class="hinequality" id="intest" onclick="inequtest()"><</td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
-		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
-		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
-		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
-		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
-		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
-		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
-		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
-		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
+		<tr>
+			<td class="numbercell" id="numbercell1" onclick="cellclick(1)"></td>
+			<td class="hinequality" id="hin1" onclick="hin(1)"></td>
+			<td class="numbercell" id="numbercell2" onclick="cellclick(2)"></td>
+			<td class="hinequality" id="hin2" onclick="hin(2)"></td>
+			<td class="numbercell" id="numbercell3" onclick="cellclick(3)"></td>
+			<td class="hinequality" id="hin3" onclick="hin(3)"></td>
+			<td class="numbercell" id="numbercell4" onclick="cellclick(4)"></td>
+			<td class="hinequality" id="hin4" onclick="hin(4)"></td>
+			<td class="numbercell" id="numbercell5" onclick="cellclick(5)"></td>
+		</tr>
+		<tr>
+			<td class="vinequality" id="vin1" onclick="vin(1)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin2" onclick="vin(2)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin3" onclick="vin(3)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin4" onclick="vin(4)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin5" onclick="vin(5)"></td>
+		</tr>
+		<tr>
+			<td class="numbercell" id="numbercell6" onclick="cellclick(6)"></td>
+			<td class="hinequality" id="hin6" onclick="hin(6)"></td>
+			<td class="numbercell" id="numbercell7" onclick="cellclick(7)"></td>
+			<td class="hinequality" id="hin7" onclick="hin(7)"></td>
+			<td class="numbercell" id="numbercell8" onclick="cellclick(8)"></td>
+			<td class="hinequality" id="hin8" onclick="hin(8)"></td>
+			<td class="numbercell" id="numbercell9" onclick="cellclick(9)"></td>
+			<td class="hinequality" id="hin9" onclick="hin(9)"></td>
+			<td class="numbercell" id="numbercell10" onclick="cellclick(10)"></td>
+		</tr>
+		<tr>
+			<td class="vinequality" id="vin6" onclick="vin(6)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin7" onclick="vin(7)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin8" onclick="vin(8)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin9" onclick="vin(9)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin10" onclick="vin(10)"></td>
+		</tr>
+		<tr>
+			<td class="numbercell" id="numbercell11" onclick="cellclick(11)"></td>
+			<td class="hinequality" id="hin11" onclick="hin(11)"></td>
+			<td class="numbercell" id="numbercell12" onclick="cellclick(12)"></td>
+			<td class="hinequality" id="hin12" onclick="hin(12)"></td>
+			<td class="numbercell" id="numbercell13" onclick="cellclick(13)"></td>
+			<td class="hinequality" id="hin13" onclick="hin(13)"></td>
+			<td class="numbercell" id="numbercell14" onclick="cellclick(14)"></td>
+			<td class="hinequality" id="hin14" onclick="hin(14)"></td>
+			<td class="numbercell" id="numbercell15" onclick="cellclick(15)"></td>
+		</tr>
+		<tr>
+			<td class="vinequality" id="vin11" onclick="vin(11)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin12" onclick="vin(12)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin13" onclick="vin(13)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin14" onclick="vin(14)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin15" onclick="vin(15)"></td>
+		</tr>
+		<tr>
+			<td class="numbercell" id="numbercell16" onclick="cellclick(16)"></td>
+			<td class="hinequality" id="hin16" onclick="hin(16)"></td>
+			<td class="numbercell" id="numbercell17" onclick="cellclick(17)"></td>
+			<td class="hinequality" id="hin17" onclick="hin(17)"></td>
+			<td class="numbercell" id="numbercell18" onclick="cellclick(18)"></td>
+			<td class="hinequality" id="hin18" onclick="hin(18)"></td>
+			<td class="numbercell" id="numbercell19" onclick="cellclick(19)"></td>
+			<td class="hinequality" id="hin19" onclick="hin(19)"></td>
+			<td class="numbercell" id="numbercell20" onclick="cellclick(20)"></td>
+		</tr>
+		<tr>
+			<td class="vinequality" id="vin16" onclick="vin(16)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin17" onclick="vin(17)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin18" onclick="vin(18)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin19" onclick="vin(19)"></td>
+			<td class="spacer"></td>
+			<td class="vinequality" id="vin20" onclick="vin(20)"></td>
+		</tr>
+		<tr>
+			<td class="numbercell" id="numbercell21" onclick="cellclick(21)"></td>
+			<td class="hinequality" id="hin21" onclick="hin(21)"></td>
+			<td class="numbercell" id="numbercell22" onclick="cellclick(22)"></td>
+			<td class="hinequality" id="hin22" onclick="hin(22)"></td>
+			<td class="numbercell" id="numbercell23" onclick="cellclick(23)"></td>
+			<td class="hinequality" id="hin23" onclick="hin(23)"></td>
+			<td class="numbercell" id="numbercell24" onclick="cellclick(24)"></td>
+			<td class="hinequality" id="hin24" onclick="hin(24)"></td>
+			<td class="numbercell" id="numbercell25" onclick="cellclick(25)"></td>
+		</tr>
 	</table>
 	<table>
 		<tr>
@@ -41,17 +131,83 @@
 		</center></td></tr>
 	</table>
 
+	<div id="picknumber" class="pickingtable" style="visibility:hidden; position:absolute; top:0px; left:0px;">
+		<table style="background-color:gray; border-radius:10px;">
+			<tr style="vertical-align:middle;">
+				<td onClick="numberpicked(1)"; class="pickingcell"><div class="pickingcellcontent">1</div></td>
+				<td onClick="numberpicked(2)"; class="pickingcell"><div class="pickingcellcontent">2</div></td>
+				<td onClick="numberpicked(3)"; class="pickingcell"><div class="pickingcellcontent">3</div></td>
+			</tr>
+			<tr style="vertical-align:middle;">
+				<td onClick="numberpicked(4)"; class="pickingcell"><div class="pickingcellcontent">4</div></td>
+				<td onClick="numberpicked(5)"; class="pickingcell"><div class="pickingcellcontent">5</div></td>
+				<td onClick="numberpicked(0)"; class="pickingcell"><div class="pickingcellcontent"></div></td>
+			</tr>
+		</table>
+	</div>
+
 </center></body>
 </html>
 
 <script type="text/javascript">
 
-function solve(){
-	document.getElementById("solvebutton").innerHTML="Bongo";
+var hinequalitystate=[];
+for(i=1; i<26; i++){hinequalitystate[i]=0;}
+var vinequalitystate=[];
+for(i=1; i<21; i++){vinequalitystate[i]=0;}
+var editedcell=0;
+var numbercellstate=[];
+for(i=1; i<26; i++){numbercellstate[i]=0;}
+var possibles = new Array(26); for(var i=1; i<26; i++){possibles[i] = new Array(10); for(var j=1; j<6; j++){possibles[i][j]=1;}}
+var possiblescount=0;
+var possiblesvalue=0;
+
+
+function hin(n){
+	hinequalitystate[n]=(hinequalitystate[n]+1)%3;
+	if(hinequalitystate[n]==0){document.getElementById("hin"+n).innerHTML="";}
+	if(hinequalitystate[n]==1){document.getElementById("hin"+n).innerHTML="<";}
+	if(hinequalitystate[n]==2){document.getElementById("hin"+n).innerHTML=">";}
 }
 
-function inequtest(){
-	document.getElementById("intest").innerHTML="<";
+function vin(n){
+	vinequalitystate[n]=(vinequalitystate[n]+1)%3;
+	if(vinequalitystate[n]==0){document.getElementById("vin"+n).innerHTML="";}
+	if(vinequalitystate[n]==1){document.getElementById("vin"+n).innerHTML="&#8897;";}
+	if(vinequalitystate[n]==2){document.getElementById("vin"+n).innerHTML="&#8896;";}
+}
+
+function cellclick(n){
+	document.getElementById("picknumber").style.visibility="visible";
+  document.getElementById("picknumber").style.left=(event.clientX+10)+"px";
+  document.getElementById("picknumber").style.top=(event.clientY+10)+"px";
+	editedcell=n;
+}
+
+function numberpicked(n){
+	fillcell(editedcell, n);
+	document.getElementById("picknumber").style.visibility="hidden";
+}
+
+function fillcell(cellnumber, fillnumber){
+	numbercellstate[cellnumber]=fillnumber;
+	if(fillnumber==0){document.getElementById("numbercell"+cellnumber).innerHTML="";}
+	else{
+		for(i=1; i<6; i++){possibles[cellnumber][i]=0;}
+		possibles[cellnumber][i]=1;
+		document.getElementById("numbercell"+cellnumber).innerHTML=fillnumber;
+	}
+}
+
+function solve(){
+	for(p=1; p<26; p++){
+		possiblescount=0;
+		possiblesvalue=0;
+		for(j=1; j<6; j++){
+			if(possibles[p][j]==1){possiblescount++; possiblesvalue=j;}
+		}
+		if(possiblescount==1){fillcell(i, possiblesvalue);}
+	}
 }
 
 </script>
