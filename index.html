@@ -1,6 +1,6 @@
 <!DOCTYPE html><html>
 <head>
-	<title>Don&rsquo;t Eat the Last Piece of Chocolate</title>
+	<title>Futoshiki Solver</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="shortcut icon" href="favicon.ico">
 </head>
@@ -12,24 +12,32 @@
 			<a href="#popup1"><img title="Information" src="../jdgmiles.github.io/questionmark.png" style="width:60px; height:60px"></a><br>
 			<a href="https://twitter.com/jimdgmiles" target=blank_><img title="James Miles on Twitter" src="../jdgmiles.github.io/twitter.png" style="width:60px; height:60px"></a><br>
 			<a href="http://jdgmiles.github.io/" target="_blank"><img title="Projects Page" src="../jdgmiles.github.io/jdgm.png" style="width:60px; height:60px"></a><br>
-			<a id="soundcontrol" onclick="togglesound()"><img title="Sound On/Off" src="../jdgmiles.github.io/soundon.png" style="width:60px; height:60px"></a><br>
 		</td>
 	</table>
 
 	<div id="popup1" class="overlay">
 		<div class="popup">
 			<a class="close" style="right: 30px;" href="#">&times;</a>
-			<div style="font-family:Georgia; color:white; text-align:center; text-decoration:underline; font-size:230%">Don&rsquo;t Eat the Last Piece <br>of Chocolate</div>
-			<span style="font-family:Georgia; font-size:170%; color:white; text-align:justify;"><br>Tap a piece of chocolate to highlight a portion of the bar.<br><br>Tap it again to eat those pieces.<br><br>Take turns with the opponent, and don&rsquo;t eat the last piece!<br></span>
+			<div style="font-family:Georgia; color:white; text-align:center; text-decoration:underline; font-size:230%">Futoshiki Solver</div>
+			<span style="font-family:Georgia; font-size:25px; color:white; text-align:justify;"><br>This is a solver for Futoshiki puzzles.<br><br>Click a cell to insert a number clue and click between two cells to insert an inequality clue.<br><br>When you are ready, click &ldquo;Solve&rdquo;.<br></span>
 		</div>
 	</div>
 
-	<table style="padding:0px 80px 0px 80px;" id="tablecontents">
+	<table style="padding:0px 80px 0px 80px;">
+		<tr><td class="numbercell"></td><td class="hinequality" id="intest" onclick="inequtest()"><</td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
+		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
+		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
+		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
+		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
+		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
+		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
+		<tr><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td><td class="spacer"></td><td class="vinequality"></td></tr>
+		<tr><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td><td class="hinequality"></td><td class="numbercell"></td></tr>
 	</table>
 	<table>
 		<tr>
-		<td colspan="9"><center><br>
-			<a id="instructions" style="font-family:Georgia; color:white; font-size:310%"><span onclick="aiturn()">Tap a piece, or tap here to go second.</span></a>
+		<td colspan="9"><center><br><br>
+			<button class="solvebutton" id="solvebutton" onclick="solve()">Solve</button>
 		</center></td></tr>
 	</table>
 
@@ -37,149 +45,13 @@
 </html>
 
 <script type="text/javascript">
-var tablecolumns=9;
-var tablerows=5;
-var tablecontentsmarkup=" ";
-var maxwidth=1000;
-var maxheight=1100;
-var cellsize=Math.min(Math.floor(maxwidth/tablecolumns), Math.floor(maxheight/tablerows));
-var cellstate=[];
-for(var i=0; i<tablecolumns*tablerows; i++){cellstate[i]=0;}
-for(var i=0; i<tablerows; i++){
-	tablecontentsmarkup=tablecontentsmarkup+"<tr>";
-	for(var j=0; j<tablecolumns; j++){
-		tablecontentsmarkup=tablecontentsmarkup+"<td class=\"gridcell\" id=\""+(i*tablecolumns+j)+"\" onclick=\"clicked("+(i*tablecolumns+j)+")\" style=\"width:"+cellsize+"px; height:"+cellsize+"px;\"><img src=\"ChocolatePiece.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\"></td>";
-	}
-	tablecontentsmarkup=tablecontentsmarkup+"</tr>";
-}
-var playerturn=0;
-var testcell=0;
-var validcell=0;
-var cellstatecount=0;
-var thinkingtimemin=500;
-var thinkingtimerandom=500;
-var thinkingtimerandommodifier=200;
-var cellstatecountII=0;
-var blacklisted=tablerows*tablecolumns+1;
-var audio=new Audio('Om Nom Nom.mp3');
-var sound=1;
 
-document.getElementById("tablecontents").innerHTML=tablecontentsmarkup;
-
-function clicked(cell){
-	cellstatecount=0;
-	for(var i=0; i<tablecolumns*tablerows; i++){cellstatecount+=cellstate[i];}
-	if((cellstatecount==(tablecolumns*tablerows)-1) && (cell==tablecolumns*(tablerows-1))){document.getElementById("tablecontents").innerHTML="<tr><td><span onclick=\"window.location.href='index.html';\" style=\"font-family:Georgia; color:white; font-size:600%\"><br><br>You Lost &#9785;</span></td></tr>"; document.getElementById("instructions").innerHTML="<span onclick=\"window.location.href='index.html';\">Tap here to play again.</span>";}
-	else if(playerturn==0){
-		if(cellstate[cell]==0){
-			for(var i=0; i<(tablecolumns*tablerows); i++){
-				if(cellstate[i]==2){cellstate[i]=0;}
-				if((i%tablecolumns)>(cell%tablecolumns) && i<(cell) && cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePieceDarkerUpRightArrow.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-				else if(i>cell && i<(cell-(cell%tablecolumns)+tablecolumns) && cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePieceDarkerRightArrow.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-				else if(i<cell && i%tablecolumns==cell%tablecolumns && cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePieceDarkerUpArrow.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-				else if(cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePiece.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-			}
-			document.getElementById(cell).innerHTML="<img src=\"ChocolatePieceDarkerEatCheck.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";
-			document.getElementById("instructions").innerHTML="Tap the tick to eat these pieces.";
-			cellstate[cell]=2;
-		}
-		else if(cellstate[cell]==2){
-			if(sound==1){audio.play();}
-			for(var i=0; i<(tablecolumns*tablerows); i++){
-				if((i%tablecolumns)>=(cell%tablecolumns) && i<(cell+tablecolumns) && cellstate[i]==0){document.getElementById(i).innerHTML=""; cellstate[i]=1;}
-				else if(cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePiece.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-			}
-			document.getElementById(cell).innerHTML="";
-			cellstate[cell]=1;
-			if(cell==(tablecolumns*(tablerows-1))){document.getElementById("tablecontents").innerHTML="<tr><td><span onclick=\"window.location.href='index.html';\" style=\"font-family:Georgia; color:white; font-size:600%\"><br><br>You Lost &#9785;</span></td></tr>"; document.getElementById("instructions").innerHTML="<span onclick=\"window.location.href='index.html';\">Tap here to play again.</span>";}
-			else{
-				document.getElementById("instructions").innerHTML="<span style=\"font-size:130%\">Opponent is thinking...</span>";
-				thinkingtime=thinkingtimerandom*Math.random()+thinkingtimemin;
-				thinkingtimerandom+=thinkingtimerandommodifier;
-				playerturn=1;
-				setTimeout(aiturn, thinkingtime);
-			}
-		}
-	}
+function solve(){
+	document.getElementById("solvebutton").innerHTML="Bongo";
 }
 
-function aiturn(){
-	cellstatecount=0;
-	for(var i=0; i<tablecolumns*tablerows; i++){cellstatecount+=cellstate[i];}
-	if(cellstatecount==(tablecolumns*tablerows)-1){
-		document.getElementById((tablecolumns*(tablerows-1))).innerHTML="";
-		document.getElementById("tablecontents").innerHTML="<tr><td><span onclick=\"window.location.href='index.html';\" style=\"font-family:Georgia; color:white; font-size:800%\"><br>You Won!</span></td></tr>"; document.getElementById("instructions").innerHTML="<span onclick=\"window.location.href='index.html';\">Tap here to play again.</span>";}
-
-	else {
-		validcell=0;
-
-		cellstatecount=0;
-		for(var i=0; i<tablecolumns*(tablerows-1); i++){cellstatecount+=cellstate[i];}
-		if(cellstatecount==(tablecolumns*(tablerows-1))){testcell=(tablecolumns*(tablerows-1)+1); validcell=1;} // makes you lose if down to horizontal 1xn
-
-		cellstatecount=0;
-		for(var i=0; i<tablecolumns*tablerows; i++){if(i%tablecolumns!=0){cellstatecount+=cellstate[i];}}
-		if(cellstatecount==(tablecolumns-1)*tablerows){testcell=tablecolumns*(tablerows-2); validcell=1;}  // makes you lose if down to vertical 1xn
-
-		cellstatecount=0;
-		for(var i=0; i<tablecolumns*tablerows; i+=tablecolumns){if(cellstate[i]==0){cellstatecount++;}}
-		for(var i=tablecolumns*(tablerows-1); i<tablecolumns*tablerows; i++){if(cellstate[i]==0){cellstatecount--;}} // checks if L-symmetric
-		if(cellstatecount==0 && cellstate[tablecolumns*(tablerows-2)+1]==0){testcell=tablecolumns*(tablerows-2)+1; validcell=1;} // if so then chooses L-holder, if not eaten
-
-		blacklisted=tablerows*tablecolumns+1;
-
-		cellstatecount=0;
-		cellstatecountII=0; // checks if L-asymmetric and chooses symmetry-making cell if L-holder is gone, otherwise blacklists that choice for next step
-		for(var i=0; i<tablecolumns*tablerows; i+=tablecolumns){if(cellstate[i]==0){cellstatecount++;}}
-		for(var i=tablecolumns*(tablerows-1); i<tablecolumns*tablerows; i++){if(cellstate[i]==0){cellstatecountII++;}}
-		if(cellstatecount>cellstatecountII){
-			if(cellstate[tablecolumns*(tablerows-2)+1]==1){testcell=tablecolumns*(tablerows-cellstatecountII-1); validcell=1;}
-			else{blacklisted=tablecolumns*(tablerows-cellstatecountII-1);}
-		}
-		else if(cellstatecount<cellstatecountII){
-			if(cellstate[tablecolumns*(tablerows-2)+1]==1){testcell=tablecolumns*(tablerows-1)+cellstatecount; validcell=1;}
-			else{blacklisted=tablecolumns*(tablerows-1)+cellstatecount;}
-		}
-
-		cellstatecount=0;
-		for(var i=0; i<tablecolumns*tablerows; i++){cellstatecount+=cellstate[i];}
-		while(!validcell){
-			testcell=Math.floor(tablerows*tablecolumns*Math.random());
-			if(cellstate[testcell]==0
-				&& testcell!=(tablecolumns*(tablerows-1)) // won't pick losing cell
-				&& ( ( (testcell!=1+tablecolumns*(tablerows-1)) && (testcell!=tablecolumns*(tablerows-2)) ) || cellstatecount==(tablerows*tablecolumns)-3 ) // won't leave a 1xn
-				&& ( (testcell!=1+tablecolumns*(tablerows-2)) || cellstatecount==(tablerows*tablecolumns)-4 ) // won't leave an L
-				&& ( (testcell!=blacklisted) || cellstatecount==(tablerows*tablecolumns)-5 ) // won't leave L-symmetry
-			){validcell=1;}
-		}
-
-		for(var i=0; i<(tablecolumns*tablerows); i++){
-			if((i%tablecolumns)>(testcell%tablecolumns) && i<(testcell) && cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePieceDarkerUpRightArrow.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-			else if(i>testcell && i<(testcell-(testcell%tablecolumns)+tablecolumns) && cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePieceDarkerRightArrow.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-			else if(i<testcell && i%tablecolumns==testcell%tablecolumns && cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePieceDarkerUpArrow.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-			else if(cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePiece.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-		}
-		document.getElementById(testcell).innerHTML="<img src=\"ChocolatePieceDarkerEatCheck.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";
-
-		setTimeout(aiconfirm, 900);
-
-	}
-}
-
-function aiconfirm(){
-	if(sound==1){audio.play();}
-	for(var i=0; i<(tablecolumns*tablerows); i++){
-		if((i%tablecolumns)>=(testcell%tablecolumns) && i<(testcell+tablecolumns) && cellstate[i]==0){document.getElementById(i).innerHTML=""; cellstate[i]=1;}
-		else if(cellstate[i]==0){document.getElementById(i).innerHTML="<img src=\"ChocolatePiece.png\" style=\"width:"+cellsize+"px; height:"+cellsize+"px; display:block;\">";}
-	}
-
-	playerturn=0;
-	document.getElementById("instructions").innerHTML="<span style=\"font-size:140%\">Your move</span>";
-}
-
-function togglesound(){
-	if(sound==1){sound=0; document.getElementById("soundcontrol").innerHTML="<img title=\"Sound On/Off\" src=\"../jdgmiles.github.io/soundoff.png\" style=\"width:60px; height:60px\">";}
-	else{sound=1; document.getElementById("soundcontrol").innerHTML="<img title=\"Sound On/Off\" src=\"../jdgmiles.github.io/soundon.png\" style=\"width:60px; height:60px\">";}
+function inequtest(){
+	document.getElementById("intest").innerHTML="<";
 }
 
 </script>
