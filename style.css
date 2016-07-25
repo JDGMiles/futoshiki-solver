@@ -28,7 +28,7 @@ body {font-family: Liberation Serif, Tahoma, Arial, Helvetica, Sans-Serif; backg
 
 table {border-spacing: 0;}
 
-.numbercell {background-color:white; width:70px;height:70px; text-align:center; font-size:50px}
+.numbercell {background-color:white; width:70px;height:70px; text-align:center; font-size:50px; border-radius:7px;}
 
 .hinequality {background-color:none; width:50px; color:white; text-align:center; font-size:40px;}
 .vinequality {background-color:none; height:50px; color:white; text-align:center; font-size:38px;}

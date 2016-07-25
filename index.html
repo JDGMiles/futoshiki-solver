@@ -152,15 +152,21 @@
 <script type="text/javascript">
 
 var hinequalitystate=[];
-for(i=1; i<26; i++){hinequalitystate[i]=0;}
+for(i=0; i<26; i++){hinequalitystate[i]=0;}
 var vinequalitystate=[];
-for(i=1; i<21; i++){vinequalitystate[i]=0;}
+for(i=0; i<21; i++){vinequalitystate[i]=0;}
 var editedcell=0;
 var numbercellstate=[];
-for(i=1; i<26; i++){numbercellstate[i]=0;}
-var possibles = new Array(26); for(var i=1; i<26; i++){possibles[i] = new Array(10); for(var j=1; j<6; j++){possibles[i][j]=1;}}
+for(i=0; i<26; i++){numbercellstate[i]=0;}
+var possibles=[];
+for(i=0; i<26; i++){
+	possibles[i]=[];
+	possibles[i][0]=0;
+	for(j=1; j<6; j++){possibles[i][j]=1;}
+}
 var possiblescount=0;
 var possiblesvalue=0;
+var progress=1;
 
 
 function hin(n){
@@ -194,19 +200,49 @@ function fillcell(cellnumber, fillnumber){
 	if(fillnumber==0){document.getElementById("numbercell"+cellnumber).innerHTML="";}
 	else{
 		for(i=1; i<6; i++){possibles[cellnumber][i]=0;}
-		possibles[cellnumber][i]=1;
+		possibles[cellnumber][fillnumber]=1;
 		document.getElementById("numbercell"+cellnumber).innerHTML=fillnumber;
 	}
 }
 
 function solve(){
-	for(p=1; p<26; p++){
-		possiblescount=0;
-		possiblesvalue=0;
-		for(j=1; j<6; j++){
-			if(possibles[p][j]==1){possiblescount++; possiblesvalue=j;}
+	for(i=0; i<26; i++){for(j=1; j<6; j++){possibles[i][j]=1;}}
+	progress=0;
+	solvestep();
+	while(progress!=0){solvestep();}
+}
+
+function solvestep(){
+	progress=0;
+	for(p=1; p<26; p++){ // fills cells with only one possibility
+		if(numbercellstate[p]==0){
+			possiblescount=0;
+			possiblesvalue=0;
+			for(j=1; j<6; j++){
+				if(possibles[p][j]==1){possiblescount++; possiblesvalue=j;}
+			}
+			if(possiblescount==1){fillcell(p, possiblesvalue); progress++;}
 		}
-		if(possiblescount==1){fillcell(i, possiblesvalue);}
+	}
+	for(p=1; p<26; p++){ // removes possibilities in same columns as filled cells
+		if(numbercellstate[p]!=0){
+			for(i=0; i<5; i++){
+				if(p != ((p-1)%5)+(5*i)+1 && possibles[((p-1)%5)+(5*i)+1][numbercellstate[p]]!=0){
+					possibles[((p-1)%5)+(5*i)+1][numbercellstate[p]]=0;
+					progress++;
+				}
+			}
+		}
+	}
+	for(p=1; p<26; p++){ // removes possibilities in same rows as filled cells
+		if(numbercellstate[p]!=0){
+			for(i=1; i<6; i++){
+				if(p != (5*Math.floor((p-1)/5))+i && possibles[(5*Math.floor((p-1)/5))+i][numbercellstate[p]]!=0){
+					possibles[(5*Math.floor((p-1)/5))+i][numbercellstate[p]]=0;
+					progress++;
+				}
+			}
+		}
 	}
 }
 
