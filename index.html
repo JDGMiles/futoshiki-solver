@@ -234,7 +234,7 @@ function solvestep(){
 			}
 		}
 	}
-	for(p=1; p<26; p++){ // removes possibilities in same rows as filled cells
+	for(p=1; p<26; p++){ // removes possibilities in same rows as filled cells.
 		if(numbercellstate[p]!=0){
 			for(i=1; i<6; i++){
 				if(p != (5*Math.floor((p-1)/5))+i && possibles[(5*Math.floor((p-1)/5))+i][numbercellstate[p]]!=0){
