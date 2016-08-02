@@ -24,7 +24,7 @@
 @font-face {font-family: Liberation Serif Italic; src: url(http://jdgmiles.github.io/LiberationSerif-Italic.woff);}
 @font-face {font-family: Liberation Serif Bold Italic; src: url(http://jdgmiles.github.io/LiberationSerif-BoldItalic.woff);}
 
-body {font-family: Liberation Serif, Tahoma, Arial, Helvetica, Sans-Serif; background-color:black; color:black; cursor:default;}
+body {font-family: Liberation Serif, Georgia, Tahoma, Arial, Helvetica, Sans-Serif; background-color:black; color:black; cursor:default;}
 
 table {border-spacing: 0;}
 
