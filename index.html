@@ -18,12 +18,12 @@
 	<div id="popup1" class="overlay">
 		<div class="popup">
 			<a class="close" style="right: 30px;" href="#">&times;</a>
-			<div style="font-family:Georgia; color:white; text-align:center; text-decoration:underline; font-size:230%">Futoshiki Solver</div>
-			<span style="font-family:Georgia; font-size:25px; color:white; text-align:justify;"><br>This is a solver for <a target="_blank" href="https://en.wikipedia.org/wiki/Futoshiki">Futoshiki</a> puzzles.<br><br>Click a cell to insert a number clue and click between two cells to insert an inequality clue.<br><br>When you are ready, click &ldquo;Solve&rdquo;.<br></span>
+			<div style="font-family:Georgia; color:white; text-align:center; text-decoration:underline; font-size:45px">Futoshiki Solver</div>
+			<span style="font-family:Georgia; font-size:30px; color:white; text-align:justify;"><br>This is a solver for <a target="_blank" href="https://en.wikipedia.org/wiki/Futoshiki">Futoshiki</a> puzzles.<br><br>Click a cell to insert a number clue and click between two cells to insert an inequality clue.<br><br>When you are ready, click &ldquo;Solve&rdquo;.<br><br></span>
 		</div>
 	</div>
 
-	<table style="padding:0px 80px 0px 80px;">
+	<table style="padding:0px 80px 0px 80px; min-width:725px;">
 		<tr>
 			<td class="numbercell" id="numbercell1" onclick="cellclick(1)"></td>
 			<td class="hinequality" id="hin1" onclick="hin(1)"></td>
@@ -127,7 +127,8 @@
 	<table>
 		<tr>
 		<td colspan="9"><center><br><br>
-			<button class="solvebutton" id="solvebutton" onclick="solve()">Solve</button>
+			<button class="solvebutton" id="solvebutton" onclick="if(badgrid==0){solve();} else{resetgrid();}"><span style="font-size:60px">Solve<span></button>
+			<button class="solvebutton" id="examplebutton" onclick="example()"><span style="font-size:60px">Example<span></button>
 		</center></td></tr>
 	</table>
 
@@ -157,7 +158,7 @@ var vinequalitystate=[];
 for(i=0; i<21; i++){vinequalitystate[i]=0;}
 var editedcell=0;
 var numbercellstate=[];
-for(i=0; i<26; i++){numbercellstate[i]=0;}
+for(i=0; i<26; i++){numbercellstate[i]="0";}
 var possibles=[];
 for(i=0; i<26; i++){
 	possibles[i]=[];
@@ -167,13 +168,23 @@ for(i=0; i<26; i++){
 var possiblescount=0;
 var possiblesvalue=0;
 var progress=1;
-
+var inbarrier=0;
+var badgrid=0;
+var filledcount=0;
+var guessingmode=0;
+var savedgrid="0000000000000000000000000000000000000000000000000000000000000000000000";
+var guesstrials=0;
+var guesstrialslimit=500;
+var randomcell=0;
+var randomvalue=0;
+var loopescape=0;
 
 function hin(n){
 	hinequalitystate[n]=(hinequalitystate[n]+1)%3;
 	if(hinequalitystate[n]==0){document.getElementById("hin"+n).innerHTML="";}
 	if(hinequalitystate[n]==1){document.getElementById("hin"+n).innerHTML="<";}
 	if(hinequalitystate[n]==2){document.getElementById("hin"+n).innerHTML=">";}
+	checkvalid();
 }
 
 function vin(n){
@@ -181,6 +192,7 @@ function vin(n){
 	if(vinequalitystate[n]==0){document.getElementById("vin"+n).innerHTML="";}
 	if(vinequalitystate[n]==1){document.getElementById("vin"+n).innerHTML="&#8897;";}
 	if(vinequalitystate[n]==2){document.getElementById("vin"+n).innerHTML="&#8896;";}
+	checkvalid();
 }
 
 function cellclick(n){
@@ -193,6 +205,62 @@ function cellclick(n){
 function numberpicked(n){
 	fillcell(editedcell, n);
 	document.getElementById("picknumber").style.visibility="hidden";
+	checkvalid();
+}
+
+function checkvalid(){
+	badgrid=0;
+
+	for(p=1; p<26; p++){
+
+		document.getElementById("numbercell"+p).style.backgroundColor="white";
+
+		if(numbercellstate[p]!=0){ // check for contradiction in column
+			for(i=0; i<5; i++){
+				if(p != ((p-1)%5)+(5*i)+1 && numbercellstate[((p-1)%5)+(5*i)+1]==numbercellstate[p]){
+					badgrid=1; document.getElementById("numbercell"+p).style.backgroundColor="red";
+				}
+			}
+		}
+
+		if(numbercellstate[p]!=0){ // check for contradiction in row
+			for(i=1; i<6; i++){
+				if(p != (5*Math.floor((p-1)/5))+i && numbercellstate[(5*Math.floor((p-1)/5))+i]==numbercellstate[p]){
+					badgrid=1; document.getElementById("numbercell"+p).style.backgroundColor="red";
+				}
+			}
+		}
+	}
+
+	for(p=1; p<26; p++){ // check for contradiction in horizontal inequality
+		if(p%5!=0){document.getElementById("hin"+p).style.color="white";}
+
+		if(hinequalitystate[p]==1 && numbercellstate[p]>=numbercellstate[p+1] && numbercellstate[p+1]!=0){
+			badgrid=1;
+			document.getElementById("hin"+p).style.color="red";
+		}
+		if(hinequalitystate[p]==2 && numbercellstate[p]<=numbercellstate[p+1] && numbercellstate[p]!=0){
+			badgrid=1;
+			document.getElementById("hin"+p).style.color="red";
+		}
+	}
+
+	for(p=1; p<21; p++){ // check for contradiction in vertical inequality
+		document.getElementById("vin"+p).style.color="white";
+
+		if(vinequalitystate[p]==1 && numbercellstate[p]<=numbercellstate[p+5] && numbercellstate[p]!=0){
+			badgrid=1;
+			document.getElementById("vin"+p).style.color="red";
+		}
+		if(vinequalitystate[p]==2 && numbercellstate[p]>=numbercellstate[p+5] && numbercellstate[p+5]!=0){
+			badgrid=1;
+			document.getElementById("vin"+p).style.color="red";
+		}
+	}
+
+	if(badgrid==1){document.getElementById("solvebutton").innerHTML="<span style=\"font-size:47px\">Bad Input &#9785;</span>";}
+	if(badgrid==0){document.getElementById("solvebutton").innerHTML="<span style=\"font-size:60px\">Solve</span>";}
+
 }
 
 function fillcell(cellnumber, fillnumber){
@@ -206,15 +274,46 @@ function fillcell(cellnumber, fillnumber){
 }
 
 function solve(){
-	for(i=0; i<26; i++){for(j=1; j<6; j++){possibles[i][j]=1;}}
-	progress=0;
+	for(i=1; i<26; i++){for(j=1; j<6; j++){possibles[i][j]=1;}} // resets all "possibles"
+	for(j=1; j<26; j++){if(numbercellstate[j]!=0){fillcell(j, numbercellstate[j]);}} // refills all starting cells to remove their redundant "possibles"
 	solvestep();
-	while(progress!=0){solvestep();}
+	while(progress!=0 && badgrid==0){solvestep();}
+
+	if(badgrid==1 && guessingmode==1){
+		guesstrials++; if(guesstrials<guesstrialslimit){resetgrid(); loadgrid(savedgrid); solve();}
+	}
+
+	filledcount=0;
+	for(p=1; p<26; p++){if(numbercellstate[p]!="0"){filledcount++;}}
+
+	if(filledcount!=25 && badgrid==0){
+		if(guessingmode==0){
+			savedgrid="";
+			for(p=0; p<25; p++){
+				savedgrid=savedgrid+numbercellstate[p+1];
+			}
+			for(p=1; p<26; p++){
+				savedgrid=savedgrid+hinequalitystate[p];
+			}
+			for(p=1; p<21; p++){
+				savedgrid=savedgrid+vinequalitystate[p];
+			}
+			guessingmode=1;
+		}
+		randomcell=Math.floor((Math.random()*25))+1;
+		while(numbercellstate[randomcell]!=0){randomcell=(randomcell%25)+1;}
+		randomvalue=Math.floor((Math.random()*5))+1;
+		loopescape=0;
+		while(possibles[randomcell][randomvalue]!=1 && loopescape<5){randomvalue=(randomvalue%5)+1; loopescape++;}
+		if(loopescape<5){fillcell(randomcell, randomvalue); progress=1; solve();}
+		else{guesstrials++; if(guesstrials<guesstrialslimit){resetgrid(); loadgrid(savedgrid); solve();}}
+	}
 }
 
 function solvestep(){
 	progress=0;
-	for(p=1; p<26; p++){ // fills cells with only one possibility
+
+	for(p=1; p<26; p++){ // fills cells that have only one possibility
 		if(numbercellstate[p]==0){
 			possiblescount=0;
 			possiblesvalue=0;
@@ -224,26 +323,171 @@ function solvestep(){
 			if(possiblescount==1){fillcell(p, possiblesvalue); progress++;}
 		}
 	}
+
 	for(p=1; p<26; p++){ // removes possibilities in same columns as filled cells
 		if(numbercellstate[p]!=0){
 			for(i=0; i<5; i++){
-				if(p != ((p-1)%5)+(5*i)+1 && possibles[((p-1)%5)+(5*i)+1][numbercellstate[p]]!=0){
+				if(p != ((p-1)%5)+(5*i)+1 && possibles[((p-1)%5)+(5*i)+1][numbercellstate[p]]!=0){ // note: needs the second condition otherwise will record progress when there wasn't any
 					possibles[((p-1)%5)+(5*i)+1][numbercellstate[p]]=0;
 					progress++;
 				}
 			}
 		}
 	}
+
 	for(p=1; p<26; p++){ // removes possibilities in same rows as filled cells.
 		if(numbercellstate[p]!=0){
 			for(i=1; i<6; i++){
-				if(p != (5*Math.floor((p-1)/5))+i && possibles[(5*Math.floor((p-1)/5))+i][numbercellstate[p]]!=0){
+				if(p != (5*Math.floor((p-1)/5))+i && possibles[(5*Math.floor((p-1)/5))+i][numbercellstate[p]]!=0){ // note: needs the second condition otherwise will record progress when there wasn't any
 					possibles[(5*Math.floor((p-1)/5))+i][numbercellstate[p]]=0;
 					progress++;
 				}
 			}
 		}
 	}
+
+	for(p=1; p<6; p++){ // fills cell if one of its possibles is unique for its column.
+		for(j=1; j<6; j++){ // column number (1-indexed)
+			possiblescount=0;
+			possiblesvalue=0;
+			for(k=0; k<5; k++){ // row number (0-indexed)
+				if(possibles[j+(5*k)][p]==1){
+					possiblescount++;
+					possiblesvalue=j+(5*k);
+				}
+			}
+			if(possiblescount==1 && numbercellstate[possiblesvalue]==0){fillcell(possiblesvalue, p); progress++;}
+		}
+	}
+
+	for(p=1; p<6; p++){ // fills cell if one of its possibles is unique for its row.
+		for(k=0; k<5; k++){ // row number (0-indexed)
+			possiblescount=0;
+			possiblesvalue=0;
+			for(j=1; j<6; j++){ // column number (1-indexed)
+				if(possibles[j+(5*k)][p]==1){
+					possiblescount++;
+					possiblesvalue=j+(5*k);
+				}
+			}
+			if(possiblescount==1 && numbercellstate[possiblesvalue]==0){fillcell(possiblesvalue, p); progress++;}
+		}
+	}
+
+	for(p=1; p<26; p++){ // performs horizontal inequality deductions
+
+		if(hinequalitystate[p]==1){
+
+			for(i=5; i>0; i--){
+				if(possibles[p][i]==1){inbarrier=i;} // finds lowest possible in left cell
+			}
+			for(i=1; i<inbarrier+1; i++){
+				if(possibles[p+1][i]==1){possibles[p+1][i]=0; progress++;} // removes possibles from right cell below or equal to that lowest possible in left cell
+			}
+
+			for(i=1; i<6; i++){
+				if(possibles[p+1][i]==1){inbarrier=i;} // finds highest possible in right cell
+			}
+			for(i=inbarrier; i<6; i++){
+				if(possibles[p][i]==1){possibles[p][i]=0; progress++;} // removes possibles from left cell greater or equal to that highest possible in right cell
+			}
+		}
+
+		if(hinequalitystate[p]==2){
+
+			for(i=5; i>0; i--){
+				if(possibles[p+1][i]==1){inbarrier=i;} // finds lowest possible in right cell
+			}
+			for(i=1; i<inbarrier+1; i++){
+				if(possibles[p][i]==1){possibles[p][i]=0; progress++;} // removes possibles from left cell below or equal to that lowest possible in right cell
+			}
+
+			for(i=1; i<6; i++){
+				if(possibles[p][i]==1){inbarrier=i;} // finds highest possible in left cell
+			}
+			for(i=inbarrier; i<6; i++){
+				if(possibles[p+1][i]==1){possibles[p+1][i]=0; progress++;} // removes possibles from right cell greater or equal to that highest possible in left cell
+			}
+		}
+
+	}
+
+	for(p=1; p<21; p++){ // performs vertical inequality deductions
+
+		if(vinequalitystate[p]==1){
+
+			for(i=5; i>0; i--){
+				if(possibles[p+5][i]==1){inbarrier=i;} // finds lowest possible in bottom cell
+			}
+			for(i=1; i<inbarrier+1; i++){
+				if(possibles[p][i]==1){possibles[p][i]=0; progress++;} // removes possibles from top cell below or equal to that lowest possible in bottom cell
+			}
+
+			for(i=1; i<6; i++){
+				if(possibles[p][i]==1){inbarrier=i;} // finds highest possible in top cell
+			}
+			for(i=inbarrier; i<6; i++){
+				if(possibles[p+5][i]==1){possibles[p+5][i]=0; progress++;} // removes possibles from bottom cell greater or equal to that highest possible in top cell
+			}
+		}
+
+		if(vinequalitystate[p]==2){
+
+			for(i=5; i>0; i--){
+				if(possibles[p][i]==1){inbarrier=i;} // finds lowest possible in top cell
+			}
+			for(i=1; i<inbarrier+1; i++){
+				if(possibles[p+5][i]==1){possibles[p+5][i]=0; progress++;} // removes possibles from bottom cell below or equal to that lowest possible in top cell
+			}
+
+			for(i=1; i<6; i++){
+				if(possibles[p+5][i]==1){inbarrier=i;} // finds highest possible in bottom cell
+			}
+			for(i=inbarrier; i<6; i++){
+				if(possibles[p][i]==1){possibles[p][i]=0; progress++;} // removes possibles from top cell greater or equal to that highest possible in bottom cell
+			}
+		}
+
+	}
+	checkvalid();
+
+}
+
+var examples=["0000040002004000000400000202200000000000000101100000000000000000000000", "0000200204000000000000000002000000000120000000220022000002201000202000", "0000000000000000000000000011000010020000000000010000000100001000011010", "0000000040004000000000003000000000000200000000100010000100001001000000", "0000000000000000003000000000001000000000100000101000020102020000000101"];
+var chosenexample=0;
+
+function example(){
+	chosenexample=Math.floor((Math.random() * examples.length));
+	loadgrid(examples[chosenexample]);
+}
+
+function loadgrid(n){
+	guessingmode=0;
+	for(p=0; p<25; p++){
+		fillcell(p+1, n[p]);
+	}
+
+	for(p=25; p<50; p++){
+		if((p-24)%5 != 0){
+			hinequalitystate[p-24]=n[p];
+			if(hinequalitystate[p-24]==0){document.getElementById("hin"+(p-24)).innerHTML="";}
+			if(hinequalitystate[p-24]==1){document.getElementById("hin"+(p-24)).innerHTML="<";}
+			if(hinequalitystate[p-24]==2){document.getElementById("hin"+(p-24)).innerHTML=">";}
+		}
+	}
+
+	for(p=50; p<70; p++){
+		vinequalitystate[p-49]=n[p];
+		if(vinequalitystate[p-49]==0){document.getElementById("vin"+(p-49)).innerHTML="";}
+		if(vinequalitystate[p-49]==1){document.getElementById("vin"+(p-49)).innerHTML="&#8897;";}
+		if(vinequalitystate[p-49]==2){document.getElementById("vin"+(p-49)).innerHTML="&#8896;";}
+	}
+
+}
+
+function resetgrid(){
+	loadgrid("0000000000000000000000000000000000000000000000000000000000000000000000");
+	checkvalid();
 }
 
 </script>

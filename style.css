@@ -1,25 +1,25 @@
 ::selection {
-	background-color: black;
-	color: white;
+	background-color: inherit;
+	color: inherit;
 	}
 ::-moz-selection {
-  background-color: black;
-	color: white;
+	background-color: inherit;
+	color: inherit;
 	}
 ::-o-selection {
-  background-color: black;
-	color: white;
+	background-color: inherit;
+	color: inherit;
 	}
 ::-ms-selection {
-  background-color: black;
-	color: white;
+	background-color: inherit;
+	color: inherit;
 	}
 ::-webkit-selection {
-  background-color: black;
-	color: white;
+	background-color: inherit;
+	color: inherit;
 	}
 
-@font-face {font-family: Liberation Serif; src: url(LiberationSerif.woff);}
+@font-face {font-family: Liberation Serif; src: url(http://jdgmiles.github.io/LiberationSerif.woff);}
 @font-face {font-family: Liberation Serif Bold; src: url(http://jdgmiles.github.io/LiberationSerif-Bold.woff);}
 @font-face {font-family: Liberation Serif Italic; src: url(http://jdgmiles.github.io/LiberationSerif-Italic.woff);}
 @font-face {font-family: Liberation Serif Bold Italic; src: url(http://jdgmiles.github.io/LiberationSerif-BoldItalic.woff);}
@@ -34,7 +34,7 @@ table {border-spacing: 0;}
 .vinequality {background-color:none; height:50px; color:white; text-align:center; font-size:38px;}
 .spacer {background-color:none;}
 
-.solvebutton {background-color:black; color:white; font-family: Liberation Serif, Georgia; font-size:60px; width:220px;}
+.solvebutton {text-align:center; vertical-align:middle; background-color:black; color:white; font-family: Liberation Serif, Georgia; width:280px; height:80px}
 
 .pickingcell {text-align:center; vertical-align:middle; background-color:transparent; padding:3px;}
 
@@ -68,7 +68,7 @@ a:visited {color:#DD0000;}
   background: #181818;
   border: 2px solid #AAAAAA;
   border-radius: 20px;
-  width: 410px;
+  width: 500px;
   position: relative;
   transition: all 0s ease-in-out;
 }
