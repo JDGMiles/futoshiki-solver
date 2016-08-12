@@ -459,6 +459,7 @@ var chosenexample=0;
 function example(){
 	chosenexample=Math.floor((Math.random() * examples.length));
 	loadgrid(examples[chosenexample]);
+	checkvalid();
 }
 
 function loadgrid(n){
